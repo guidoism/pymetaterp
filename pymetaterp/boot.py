@@ -1,3 +1,15 @@
+"""This is where we interpret the grammar that we will be using to
+define and intrepret other more complex grammars -- This is known as
+bootstrapping.
+
+Let's start with the 'or' operator since that's easy to understand. We
+will try each of the options, in order, and return the first match. We
+use exceptions to backtrack when a match option fails. When match is
+called we create a copy of the input and go back to that when a match
+fails.
+
+"""
+
 from util import MatchError, Node
 
 NAME, FLAGS, ARGS, BODY = [0, 1, 2, 3]
@@ -27,9 +39,12 @@ class Interpreter:
             self.input = [new_input, new_pos]
         old_input = self.input[:]
         name = root.name
-        #print("matching %s" % name)
+        print("matching %s" % name)
         if name in ["and", "args", "body", "output"]:
             outputs = [self.match(child) for child in root]
+            # GUIDO: I think what the following means is: If any of
+            # the nodes in root are "output" then filter out anthing
+            # that's not "output". Yes? What is this for?
             if any(child.name == "output" for child in root):
                 outputs = [output for child, output in zip(root, outputs)
                            if child.name == "output"]

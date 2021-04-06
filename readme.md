@@ -67,7 +67,7 @@ gives an error.
 
 *Since this is a pre-release, there are likely bugs with parts of the language I don't use so often. It _can_ build the AST for all files included here.* 
 
-## Gramamr language differences
+## Grammar language differences
 
 The beginning of `boot_grammar.py` self-describes the grammar. Its a PEG so all "or" (`|`) returns the first match and "and" and "quantified" (`*, +, ?`) are greedy.
 
