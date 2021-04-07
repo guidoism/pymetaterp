@@ -40,7 +40,7 @@ class Interpreter:
             self.input = [new_input, new_pos]
         old_input = self.input[:]
         name = root.name
-        print("matching %s:\n\t%s" % (name, root))
+        #print("matching %s:\n\t%s" % (name, root))
         if name in ["and", "args", "body", "output"]:
             outputs = [self.match(child) for child in root]
             # GUIDO: I think what the following means is: If any of

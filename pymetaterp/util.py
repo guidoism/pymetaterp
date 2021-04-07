@@ -22,12 +22,12 @@ class Node(list):
             return
         print_node = bool(filter is None or filter(self))
         if print_node:
-            print " "*indent + self.name
+            print(" "*indent + self.name)
         for child in self:
             if not hasattr(child, "pprint"):
                 if print_node:
-                    print "%s%s %s" % (" "*(indent + 2), type(child).__name__,
-                                       repr(child))
+                    print("%s%s %s" % (" "*(indent + 2), type(child).__name__,
+                                       repr(child)))
             else:
                 child.pprint(max_depth, max_width, indent + 2*print_node, filter)
 

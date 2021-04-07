@@ -16,4 +16,4 @@ for i in range(3):
     i3 = boot.Interpreter(match_tree3)
 grammar += boot_grammar.diff
 match_tree3 = i3.match(i3.rules['grammar'][-1], grammar)
-print match_tree == match_tree2
+print(match_tree == match_tree2)
