@@ -2,7 +2,8 @@ import sys
 sys.path.append('.')
 sys.setrecursionlimit(5000)
 from pymetaterp.util import simple_wrap_tree
-from pymetaterp import boot_tree, boot_stackless as boot, boot_grammar
+#from pymetaterp import boot_tree, boot_stackless as boot, boot_grammar
+from pymetaterp import boot_tree, boot, boot_grammar
 
 grammar = boot_grammar.bootstrap + boot_grammar.extra
 i1 = boot.Interpreter(simple_wrap_tree(boot_tree.tree))

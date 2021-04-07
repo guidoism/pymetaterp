@@ -39,7 +39,7 @@ class Interpreter:
             self.input = [new_input, new_pos]
         old_input = self.input[:]
         name = root.name
-        print("matching %s" % name)
+        print("matching %s:\n\t%s" % (name, root))
         if name in ["and", "args", "body", "output"]:
             outputs = [self.match(child) for child in root]
             # GUIDO: I think what the following means is: If any of
@@ -49,10 +49,55 @@ class Interpreter:
                 outputs = [output for child, output in zip(root, outputs)
                            if child.name == "output"]
         elif name == "quantified":
+            #############################
+            # GUIDO: Maybe this is cleaner?
+            # r, q = root[0:2]
+            # while len(o) < upper:
+            #     last = dup(i)
+            #     if m := match(r):
+            #         o.append(m)
+            #     else:
+            #         i = dup(last)
+            #         break
+            #     if last == i:
+            #         break # GUIDO: Why? Because it didn't match anything?
+            #############################
+            # GUIDO: What about this?
+            # r, q = root[0:2]
+            # last = None
+            # while len(o) < upper and last != i:
+            #     last = dup(i)
+            #     if m := match(r):
+            #         o.append(m)
+            #     else:
+            #         i = dup(last)
+            #         break
+            #############################
+            # GUIDO: What about this?
+            # Ok, so we want to repeat the rule until it fails with an exception or
+            # it fails by not changing the input. If it fails with an exception then
+            # we need to roll back the changes to the input (though, we can also do
+            # this if there are no changes since it's a noop).
+            # def rollback_on_exception(f, d):
+            #     last = d[:]
+            #     try:
+            #         f()
+            #         return True
+            #     except:
+            #        d = last[:]
+            # def quantifier():
+            #     while len(o) < upper:
+            #         ...
+            #     
+            # while matching():
+            #     pass
+            #############################
             assert(root[1].name == "quantifier")
+            # GUIDO: All those subscripts are difficult to comprehend -- Clean it up.
             lower, upper = {"*": (0, inf), "+": (1, inf), "?": (0, 1)}[root[1][0]]
             outputs = []
             while len(outputs) < upper:
+                # GUIDO: Let's make dup/revert functions to make it easier to understand?
                 last_input = self.input[:]
                 try:
                     outputs.append(self.match(root[0]))
