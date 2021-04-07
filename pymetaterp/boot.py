@@ -12,6 +12,7 @@ fails.
 
 from util import MatchError, Node
 
+# GUIDO: This should probably be a named tuple
 NAME, FLAGS, ARGS, BODY = [0, 1, 2, 3]
 inf = float("inf")
 # input is a pair (container, pos)
@@ -78,6 +79,7 @@ class Interpreter:
             # it fails by not changing the input. If it fails with an exception then
             # we need to roll back the changes to the input (though, we can also do
             # this if there are no changes since it's a noop).
+            #
             # def rollback_on_exception(f, d):
             #     last = d[:]
             #     try:
@@ -97,7 +99,6 @@ class Interpreter:
             lower, upper = {"*": (0, inf), "+": (1, inf), "?": (0, 1)}[root[1][0]]
             outputs = []
             while len(outputs) < upper:
-                # GUIDO: Let's make dup/revert functions to make it easier to understand?
                 last_input = self.input[:]
                 try:
                     outputs.append(self.match(root[0]))
@@ -109,6 +110,8 @@ class Interpreter:
             if lower > len(outputs):
                 raise MatchError("Matched %s < %s times" % (len(outputs), lower))
         elif name == "or":
+            # iter_except(functools.partial(self.match, child), MatchError)
+            # iter_rollback(functools.partial(self.match, child), MatchError, self.input)
             for child in root:
                 try:
                     return self.match(child)
@@ -125,6 +128,7 @@ class Interpreter:
             else:
                 raise MatchError("Not exactly %s" % root)
         elif name == "apply":
+            # NAME, FLAGS, ARGS, BODY = [0, 1, 2, 3]
             #print "rule %s" % root[NAME]
             if root[NAME] == "anything":
                 return pop(self.input)
